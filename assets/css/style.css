@@ -1,3 +1,6 @@
 button {
     border-color: aqua;
 }
+.index {
+    max-width: 30%;
+}

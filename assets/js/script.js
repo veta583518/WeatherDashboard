@@ -1,9 +1,10 @@
-var searchFormEl = document.querySelector("#search-form")
+var searchFormEl = document.querySelector("#search-form");
 var searchContainerEl = document.querySelector("#search-container");
 var weatherContainerEl = document.querySelector("#weather-container");
 var forecastContainerEl = document.querySelector("#forecast-container");
 var cityNameEl = document.querySelector("#city-search-term");
 var cityInputEl = document.querySelector("#city");
+var weatherEl = document.createElement("div");
 // var todayTempEl = document.querySelector("today-temp");
 // var todayHumidEl = document.querySelector("today-humid");
 // var todayWindEl = document.querySelector("#today-wind");
@@ -12,30 +13,26 @@ var cityInputEl = document.querySelector("#city");
 // var today = document.querySelector("#date");
 var apiKey = "046545aeeb89e20c575047e9c9e759c5";
 
-var getWeather = function (city) {
+var getWeather = async function (city) {
   // create variable to hold current weather api URL
   var apiUrl =
-    "https://api.openweathermap.org/data/2.5/weather?q=Memphis&unit=imperial&appid=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    city +
+    "&units=imperial&appid=" +
     apiKey;
   // make a request to the url
-  fetch(apiUrl).then(function (response) {
-
-    // request was successful
-    if(response.ok) {
-
-      // format response as json()
-      response.json().then(function (data) {
-        console.log(city);
-      });
-   }
-    else {
-      alert("Error:" + response.statusText);
-    }
-  })
-  // 
-  .catch(function (error) {
-    alert("Unable to connect to Open Weather");
-  });
+  console.log(apiUrl);
+  await fetch(apiUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(city, data);
+      displayWeather(city, data);
+    });
+  // .catch(function (error) {
+  //     console.log("Unable to connect to Open Weather");
+  //   });
 };
 // get the value of the form <input> element and send it to getWeather
 var formSubmitHandler = function (event) {
@@ -45,11 +42,10 @@ var formSubmitHandler = function (event) {
   var cityName = cityInputEl.value.trim();
 
   //validate if cityName is null
-  if(cityName) {
-
+  if (cityName) {
     // if username has value, pass data to getWeather as an argument
     getWeather(cityName);
-    console.log(cityName);
+    getForecast(cityName);
 
     // clear the form
     cityInputEl.value = "";
@@ -59,54 +55,124 @@ var formSubmitHandler = function (event) {
   }
 };
 
-// var displayWeather = function(city) {
-//   // confirm that api returned weather data
-//   if (city.length === 0) {
-//     weatherContainerEl.textContent = "No city found by that name.";
-//     return;
-//   }
-//   // clear old content
-//   weatherContainerEl.textContent = "";
+var displayWeather = function (city, data) {
+  // confirm that api returned weather data
+  if (city.length === 0) {
+    weatherContainerEl.textContent = "No city found by that name.";
+    return;
+  }
+  // clear old content
+  weatherContainerEl.textContent = "";
 
-//   // create <div> to display current weather
-//   var weatherEl = document.createElement("div");
-//   weatherEl.classList = ("card p-3 border-right-0 border-light");
-//   var weatherSpan = document.createElement("span");
-//   weatherSpan.textContent = data.name;
-//   var temperature = data.temperature;
-//   var humidity = data.humidity;
-//   var windSpeed = data.wind.speed;
+  // set classlist for weatherEl
+  weatherEl.classList = "card p-3 border-right-0 border-light m-2";
 
-//   console.log(temperature, humidity, windSpeed, UV);
-// }
-// // create variables to hold the lat and lon coords
-// var lat = weatherResponse.coord.lat;
-// var lon = weatherResponse.coord.lon;
+  // get data for header
+  var cityName = city;
+  var weatherIcon =
+    "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png";
+  var currentDate = moment().format("MM/DD/YYYY");
 
-// // create variable to hold UV Data api Url
-// var UVApiUrl =
-//   "http://api.openweathermap.org/data/2.5/uvi?lat=" +
-//   lat +
-//   "&lon=" +
-//   lon +
-//   "&appid=" +
-//   apiKey;
+  // create header element for weather header
+  var weatherHeader = document.createElement("h2");
+  weatherHeader.textContent = cityName + " " + currentDate + " " + weatherIcon;
+  // append Header to div
+  weatherEl.innerHTML = `<h2> ${cityName} ${currentDate} <span> <img src = "${weatherIcon}"/> </span></h2>`;
 
-// fetch(UVApiUrl).then(function (uvResponse) {
-// // format response as json()
-//   uvResponse.json().then(function (uvResponse) {
-//     // create variable to hold the forecaste api URL
-//     var forecastApiUrl =
-//       "https:api.openweathermap.org/data/2.5/forecast?q=Memphis&unit=imperial&appid=" +
-//       apiKey;
+  //display temp
+  var temperature = Math.round(data.main.temp);
+  var tempEl = document.createElement("p");
+  tempEl.classList = "flex-row align-right";
+  tempEl.textContent = "Temperature: " + temperature;
+  //append temp to div
+  weatherEl.appendChild(tempEl);
 
-//     fetch(forecastApiUrl).then(function (forecastResponse) {
-//       forecastResponse.json().then(function (forecastdata) {
-//         displayWeather(weatherResponse, uvResponse, forecastResponse, city);
-//       });
-//     });
-//   });
-// });
-// })
-getWeather(city);
-//searchFormEl.addEventListener("submit", formSubmitHandler);
+  //display humidity
+  var humidity = data.main.humidity;
+  var humidityEl = document.createElement("p");
+  humidityEl.classList = "flex-row align-right";
+  humidityEl.textContent = "Humidity: " + humidity + " %";
+  // append humidity to div
+  weatherEl.appendChild(humidityEl);
+
+  //display wind speed
+  var windSpeed = data.wind.speed;
+  var windEl = document.createElement("p");
+  windEl.classList = "flex-row align-right";
+  windEl.textContent = "Wind Speed: " + windSpeed + " MPH";
+  // append wind speed to div
+  weatherEl.appendChild(windEl);
+
+  var lat = data.coord.lat;
+  var lon = data.coord.lon;
+  getUVData(lat, lon);
+  // append div to container
+  weatherContainerEl.appendChild(weatherEl);
+};
+
+var getUVData = function (lat, lon) {
+  // create variables to hold the lat and lon coords
+
+  var uvApiUrl =
+    "http://api.openweathermap.org/data/2.5/uvi?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&appid=" +
+    apiKey;
+
+  fetch(uvApiUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      // display uvData
+      var uvEl = document.createElement("p");
+      uvEl.innerHTML = `<p> UV Index: <span class ="index">${data.value}</span><p>`;
+      if (data.value >= 11) {
+        uvEl.classList.add("bg-danger");
+      } else if (data.value >= 8) {
+        uvEl.classList.add("bg-warning");
+      } else {
+        uvEl.classList.add("bg-success");
+      }
+      weatherEl.appendChild(uvEl);
+      weatherContainerEl.appendChild(weatherEl);
+    });
+};
+
+var getForecast = async function (city) {
+  // create variable to hold current weather api URL
+  var apiUrl =
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
+    city +
+    "&units=imperial&appid=" +
+    apiKey;
+  // make a request to the url
+  forecastContainerEl.classList =("p-3 m-2 d-flex flex-row justify-content-between");
+  var forecastHeading = document.createElement("h3");
+  forecastHeading.textContent = "5-Day Forecast:"
+  forecastContainerEl.appendChild(forecastHeading);
+  
+  await fetch(apiUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(city, data);
+      var forecast = data.list;
+      var htmlcode = "";
+      for (var i = 0; i < forecast.length; i = i + 8) {
+        htmlcode += `<div class= "bg-primary rounded text-light"> 
+        <p> ${moment(forecast[i].dt_txt).format("MM/DD/YYYY")}</p>
+        <img src="http://openweathermap.org/img/wn/${forecast[i].weather[0].icon}@2x.png">
+        <p>Temperature: ${Math.round(forecast[i].main.temp)}</p>
+        <p>Humidity: ${forecast[i].main.humidity} %</p>
+        
+        </div>`;
+      };
+      forecastContainerEl.innerHTML = htmlcode;
+    });
+};
+searchFormEl.addEventListener("submit", formSubmitHandler);

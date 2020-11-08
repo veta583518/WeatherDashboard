@@ -57,70 +57,15 @@
         </div>
         <div class="col-md-9">
           <!-- Weather Output-->
-          <div id="weather-container" class="container-md">
-            <div class="card p-3 border-right-0 border-light">
-              <div>
-                <h2>
-                  <span id="city-search-term"></span><span id="date"></span
-                  ><span id="weather-icon"></span>
-                </h2>
-              </div>
-              <div>
-                <p id="today-temp">Temperature:</p>
-                <p id="today-humid">Humidity:</p>
-                <p id="today-wind">Wind Speed:</p>
-                <p id="today-uv">UV Index:</p>
-              </div>
-            </div>
-            <div id="forecast-container" class="">
-              <!-- Forecast-->
-              <h3>5-Day Forecast:</h3>
-              <div
-                class="d-flex flex-row justify-content-between"
-                id="forecast-card"
-              >
-                <div id="day1" class="rounded bg-primary text-light">
-                  <h4 id="date1"></h4>
-                  <i></i>
-                  <p id="temp1">Temp:</p>
-                  <p id="humidity1">Humidity:</p>
-                </div>
-
-                <div id="day2" class="rounded bg-primary text-light">
-                  <h4 id="date2"></h4>
-                  <i></i>
-                  <p id="temp2">Temp:</p>
-                  <p id="humidity2">Humidity:</p>
-                </div>
-
-                <div id="day3" class="rounded bg-primary text-light">
-                  <h4 id="date3"></h4>
-                  <i></i>
-                  <p id="temp3">Temp:</p>
-                  <p id="humidity3">Humidity:</p>
-                </div>
-
-                <div id="day4" class="bg-primary text-light rounded">
-                  <h4 id="date4"></h4>
-                  <i></i>
-                  <p id="temp4">Temp:</p>
-                  <p id="humidity4">Humidity:</p>
-                </div>
-
-                <div id="day5" class="bg-primary text-light rounded">
-                  <h4 id="date5"></h4>
-                  <i></i>
-                  <p id="temp5">Temp:</p>
-                  <p id="humidity5">Humidity:</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div id="weather-container" class="container-md"></div>
+          <!-- Forecast Output-->
+          <div id="forecast-container" class="container-md"></div>
         </div>
       </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/open-weather/2.0.0/openweather.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/open-weather/2.0.0/openweather.min.js"></script>
     <script src="assets/js/script.js"></script>
   </body>
 </html>
