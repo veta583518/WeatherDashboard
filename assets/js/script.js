@@ -17,48 +17,20 @@ var getWeather = function (city) {
   var apiUrl =
     "https://api.openweathermap.org/data/2.5/weather?q=Memphis&unit=imperial&appid=" +
     apiKey;
-  //
-  fetch(apiUrl).then(function (weatherResponse) {
+  // make a request to the url
+  fetch(apiUrl).then(function (response) {
 
     // request was successful
-    if(weatherResponse.ok) {
+    if(response.ok) {
 
       // format response as json()
-      weatherResponse.json().then(function (weatherResponse) {
-
-        // create variables to hold the lat and lon coords
-        var lat = weatherResponse.coord.lat;
-        var lon = weatherResponse.coord.lon;
-        
-        // create variable to hold UV Data api Url
-        var UVApiUrl =
-          "http://api.openweathermap.org/data/2.5/uvi?lat=" +
-          lat +
-          "&lon=" +
-          lon +
-          "&appid=" +
-          apiKey;
-
-        fetch(UVApiUrl).then(function (uvResponse) {
-        // format response as json()
-          uvResponse.json().then(function (uvResponse) {
-            // create variable to hold the forecaste api URL
-            var forecastApiUrl =
-              "https:api.openweathermap.org/data/2.5/forecast?q=Memphis&unit=imperial&appid=" +
-              apiKey;
-
-            fetch(forecastApiUrl).then(function (forecastResponse) {
-              forecastResponse.json().then(function (forecastResponse) {
-                displayWeather(weatherResponse, uvResponse, forecastResponse, city);
-              });
-            });
-          });
-        });
+      response.json().then(function (data) {
+        console.log(city);
       });
-    } 
+   }
     else {
-      alert("Error:" + weatherResponse.statusText);
-    };
+      alert("Error:" + response.statusText);
+    }
   })
   // 
   .catch(function (error) {
@@ -70,13 +42,14 @@ var formSubmitHandler = function (event) {
   event.preventDefault();
 
   // get the value from input element
-  var cityName = cityInputEl.trim();
+  var cityName = cityInputEl.value.trim();
 
   //validate if cityName is null
   if(cityName) {
 
-    // if username has value, pass data from cityname as an argument
+    // if username has value, pass data to getWeather as an argument
     getWeather(cityName);
+    console.log(cityName);
 
     // clear the form
     cityInputEl.value = "";
@@ -86,26 +59,54 @@ var formSubmitHandler = function (event) {
   }
 };
 
-var displayWeather = function(city) {
-  // confirm that api returned weather data
-  if (city.length === 0) {
-    weatherContainerEl.textContent = "No city found by that name.";
-    return;
-  }
-  // clear old content
-  weatherContainerEl.textContent = "";
+// var displayWeather = function(city) {
+//   // confirm that api returned weather data
+//   if (city.length === 0) {
+//     weatherContainerEl.textContent = "No city found by that name.";
+//     return;
+//   }
+//   // clear old content
+//   weatherContainerEl.textContent = "";
 
-  // create <div> to display current weather
-  var weatherEl = document.createElement("div");
-  weatherEl.classList = ("card p-3 border-right-0 border-light");
-  var weatherSpan = document.createElement("span");
-  weatherSpan.textContent = weatherResponse.name;
-  var temperature = weatherResponse.temperature;
-  var humidity = weatherResponse.humidity;
-  var windSpeed = weatherResponse.wind.speed;
-  var UV = uvResponse.value;
+//   // create <div> to display current weather
+//   var weatherEl = document.createElement("div");
+//   weatherEl.classList = ("card p-3 border-right-0 border-light");
+//   var weatherSpan = document.createElement("span");
+//   weatherSpan.textContent = data.name;
+//   var temperature = data.temperature;
+//   var humidity = data.humidity;
+//   var windSpeed = data.wind.speed;
 
-  console.log(temperature, humidity, windSpeed, UV);
-}
-getWeather();
-searchFormEl.addEventListener("submit", formSubmitHandler);
+//   console.log(temperature, humidity, windSpeed, UV);
+// }
+// // create variables to hold the lat and lon coords
+// var lat = weatherResponse.coord.lat;
+// var lon = weatherResponse.coord.lon;
+
+// // create variable to hold UV Data api Url
+// var UVApiUrl =
+//   "http://api.openweathermap.org/data/2.5/uvi?lat=" +
+//   lat +
+//   "&lon=" +
+//   lon +
+//   "&appid=" +
+//   apiKey;
+
+// fetch(UVApiUrl).then(function (uvResponse) {
+// // format response as json()
+//   uvResponse.json().then(function (uvResponse) {
+//     // create variable to hold the forecaste api URL
+//     var forecastApiUrl =
+//       "https:api.openweathermap.org/data/2.5/forecast?q=Memphis&unit=imperial&appid=" +
+//       apiKey;
+
+//     fetch(forecastApiUrl).then(function (forecastResponse) {
+//       forecastResponse.json().then(function (forecastdata) {
+//         displayWeather(weatherResponse, uvResponse, forecastResponse, city);
+//       });
+//     });
+//   });
+// });
+// })
+getWeather(city);
+//searchFormEl.addEventListener("submit", formSubmitHandler);
