@@ -5,13 +5,8 @@ var forecastContainerEl = document.querySelector("#forecast-container");
 var cityNameEl = document.querySelector("#city-search-term");
 var cityInputEl = document.querySelector("#city");
 var weatherEl = document.createElement("div");
-// var todayTempEl = document.querySelector("today-temp");
-// var todayHumidEl = document.querySelector("today-humid");
-// var todayWindEl = document.querySelector("#today-wind");
-// var todayUVEl = document.querySelector("#today-uv");
-// var weatherIconEl = document.querySelector("weather-icon");
-// var today = document.querySelector("#date");
 var apiKey = "046545aeeb89e20c575047e9c9e759c5";
+var searchHistoryContainer = document.querySelector("#search-history");
 
 var getWeather = async function (city) {
   // create variable to hold current weather api URL
@@ -27,7 +22,6 @@ var getWeather = async function (city) {
       return response.json();
     })
     .then(function (data) {
-      console.log(city, data);
       displayWeather(city, data);
     });
   // .catch(function (error) {
@@ -46,6 +40,7 @@ var formSubmitHandler = function (event) {
     // if username has value, pass data to getWeather as an argument
     getWeather(cityName);
     getForecast(cityName);
+    //getSearchHistory(cityName);
 
     // clear the form
     cityInputEl.value = "";
@@ -80,7 +75,7 @@ var displayWeather = function (city, data) {
   weatherEl.innerHTML = `<h2> ${cityName} ${currentDate} <span> <img src = "${weatherIcon}"/> </span></h2>`;
 
   //display temp
-  var temperature = Math.round(data.main.temp);
+  var temperature = Math.round(data.main.temp) + " °F";
   var tempEl = document.createElement("p");
   tempEl.classList = "flex-row align-right";
   tempEl.textContent = "Temperature: " + temperature;
@@ -128,16 +123,21 @@ var getUVData = function (lat, lon) {
     .then(function (data) {
       console.log(data);
       // display uvData
+      var uvText = document.createElement("p");
+      uvText.textContent = "UV Index: ";
       var uvEl = document.createElement("p");
-      uvEl.innerHTML = `<p> UV Index: <span class ="index">${data.value}</span><p>`;
+      uvEl.innerHTML = `<p id="index">${data.value}</p>`;
       if (data.value >= 11) {
-        uvEl.classList.add("bg-danger");
+        uvEl.classList = "Extreme rounded";
       } else if (data.value >= 8) {
-        uvEl.classList.add("bg-warning");
+        uvEl.classList = "very-high rounded";
+      } else if (data.value >= 6) {
+        uvEl.classList = "high rounded";
       } else {
-        uvEl.classList.add("bg-success");
+        uvEl.classList = "moderate rounded";
       }
-      weatherEl.appendChild(uvEl);
+      uvText.append(uvEl);
+      weatherEl.appendChild(uvText);
       weatherContainerEl.appendChild(weatherEl);
     });
 };
@@ -150,29 +150,35 @@ var getForecast = async function (city) {
     "&units=imperial&appid=" +
     apiKey;
   // make a request to the url
-  forecastContainerEl.classList =("p-3 m-2 d-flex flex-row justify-content-between");
+  forecastContainerEl.classList =
+    "p-3 m-2 d-flex flex-row justify-content-between";
   var forecastHeading = document.createElement("h3");
-  forecastHeading.textContent = "5-Day Forecast:"
+  forecastHeading.textContent = "5-Day Forecast:";
   forecastContainerEl.appendChild(forecastHeading);
-  
+
   await fetch(apiUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(city, data);
       var forecast = data.list;
       var htmlcode = "";
       for (var i = 0; i < forecast.length; i = i + 8) {
         htmlcode += `<div class= "bg-primary rounded text-light"> 
         <p> ${moment(forecast[i].dt_txt).format("MM/DD/YYYY")}</p>
-        <img src="http://openweathermap.org/img/wn/${forecast[i].weather[0].icon}@2x.png">
-        <p>Temperature: ${Math.round(forecast[i].main.temp)}</p>
+        <img src="http://openweathermap.org/img/wn/${
+          forecast[i].weather[0].icon
+        }@2x.png">
+        <p>Temperature: ${Math.round(forecast[i].main.temp)} °F</p>
         <p>Humidity: ${forecast[i].main.humidity} %</p>
         
         </div>`;
-      };
+      }
       forecastContainerEl.innerHTML = htmlcode;
     });
 };
+// var getSearchHistory = function(city) {
+//   var searchListEl = document.createElement("button");
+//   searchListEl.classList = (btn )
+// }
 searchFormEl.addEventListener("submit", formSubmitHandler);

@@ -1,6 +1,22 @@
 button {
     border-color: aqua;
 }
-.index {
-    max-width: 30%;
+#index {
+    max-width: 50px;
+}
+.extreme {
+    background-color: violet;
+}
+.very-high {
+    background-color: red;
+}
+.high {
+    background-color: orange;
+}
+.moderate {
+    background-color: yellow;
+}
+#index {
+    display: flex;
+    max-width: 15%;
 }

@@ -27,17 +27,17 @@
       </h1>
     </header>
 
-    <main class="flex-row container justify-content-center">
+    <main class="flex-row container justify-space-between">
       <div class="row">
         <!-- Search form-->
         <div class="bg-light col-md-3">
-          <form id="search-form" class="card-body d-flex">
+          <form id="search-form" class="card-body d-flex row">
             <label for="formControlInput">Search for a City:</label>
             <input
               type="text"
-              class="form-control"
+              class="form-input col-9"
               id="city"
-              placeholder="City, State"
+              placeholder="City"
             />
             <button type="submit" class="btn btn-primary rounded">
               <i class="fas fa-search"></i>
@@ -49,10 +49,8 @@
             <div
               class="list-group list-group-flush flex-column"
               id="search-history"
-            >
-              <a class="list-group-item">Memphis</a>
-              <a class="list-group-item">Nashville</a>
-            </div>
+            ></div>
+            <button class="btn list-group-item border w-100">Clarksville</button>
           </div>
         </div>
         <div class="col-md-9">
