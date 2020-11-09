@@ -1,6 +1,8 @@
 # WeatherDashboard
 ## Purpose
-Create a Weather Dashboard that will provide the current weather including
+Use 3rd party API to display current weather and also a 5-day forecast. Also create a clickable search history
+
+### The current weather should display
 * Input City Name
 * Date
 * Weather Icon
@@ -8,7 +10,8 @@ Create a Weather Dashboard that will provide the current weather including
 * Humidity
 * Wind Speed
 * UV Index
-5-day Forecast including
+
+### 5-day Forecast should display
 * Date
 * Temperature
 * Humidity
@@ -17,7 +20,7 @@ Create a Weather Dashboard that will provide the current weather including
 #### Screenshot 
 ![screenshotWeatherDashboard]
 
-Deployed Application
+##### Deployed Application
 
-GitHub URL
+##### GitHub URL
 [https://github.com/veta583518/WeatherDashboard](https://github.com/veta583518/WeatherDashboard)
