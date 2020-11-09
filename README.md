@@ -18,7 +18,7 @@ Use 3rd party API to display current weather and also a 5-day forecast. Also cre
 * Forecast Icon
 
 #### Screenshot 
-![screenshotWeatherDashboard]
+![screenshotWeatherDashboard](https://github.com/veta583518/WeatherDashboard/blob/main/assets/images/Screenshot.JPG)
 
 ##### Deployed Application
 
