@@ -1,6 +1,6 @@
 # WeatherDashboard
 ## Purpose
-Use 3rd party API to display current weather and also a 5-day forecast. Also create a clickable search history
+Use Open Weather's server-side APIs to display current weather and also a 5-day forecast. Also create a clickable search history
 
 ### The current weather should display
 * Input City Name
