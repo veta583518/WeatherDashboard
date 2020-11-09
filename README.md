@@ -7,4 +7,4 @@
 Deployed Application
 
 GitHub URL
-[github.com/veta583518/WeatherDashboard](githib.com/veta583518/WeatherDashboard)
+[https://github.com/veta583518/WeatherDashboard](https://github.com/veta583518/WeatherDashboard)
